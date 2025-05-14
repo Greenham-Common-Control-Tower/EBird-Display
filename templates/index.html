@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Greenham Bird Observations</title>
+    <meta http-equiv="refresh" content="900"> <!-- 15 minutes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #1472ff;
+            padding: 20px;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: 14px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 15px;
+        }
+        .name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .sci {
+            font-size: 14px;
+            color: #555;
+            font-style: italic;
+        }
+        .time {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+        .quantity {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+            color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recent Bird Sightings - Greenham Common</h1>
+    <div class="grid">
+        {% for obs in observations %}
+        <div class="card">
+            <img src="{{ obs['image_url'] }}" alt="Bird Image">
+            <div class="card-content">
+                <div class="name">{{ obs['comName'] }}</div>
+                <div class="sci">{{ obs['sciName'] }}</div>
+                <div class="quantity">Quantity: {{ obs['howMany'] or 1 }}</div>
+                <div class="time">{{ obs['obsDt'] }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <footer>
+        Data Sourced From eBird | Images From Wikipedia And Others | Version: 1.0 | Version Date: 14/5/2025 | Developed By Lawri Darbyshire (13) For Use at Greenham Common Control Tower
+    </footer>
+</body>
+</html>
