@@ -1,0 +1,7 @@
+To install & Customize the software first
+
+1. edit main.py to adjust the programs arguments and if you would like to replace my api key with yours
+2. edit setup.sh and review the commands and arguments at the topp ensure to edit the app directory varible to match where the program should install to .
+    the setup.sh file will install a startup service to automaticly startup the program on boot delete the relevant commands in the script if you wish to remove this feature.
+    it will also install the required packages and setup a venv for the program to run. 
+3. Run setup.sh this will run the install commands.  the  service should then be running at port 1991
