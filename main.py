@@ -3,7 +3,7 @@ import requests
 import wikipedia
 
 # Edit These Flags To Customize the software
-PORT = 1992
+PORT = 1991
 HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
