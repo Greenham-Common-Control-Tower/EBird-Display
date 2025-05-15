@@ -3,7 +3,8 @@ import requests
 import wikipedia
 
 # Edit These Flags To Customize the software
-PORT = 1991
+PORT = 1992
+HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
 AMOUNT_OF_BIRDS=10
@@ -69,4 +70,4 @@ def main():
     return render_template('index.html', observations=observations[:AMOUNT_OF_BIRDS])
 
 if __name__ == "__main__":
-    app.run(port=PORT)
+    app.run(port=PORT, host=HOST)
