@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Config
-APP_DIR="$HOME/LawriBirdProgram"
+APP_DIR="/home/tower/LawriBirdProgram"
 SERVICE_NAME="lawribird"
 PYTHON_BIN="$APP_DIR/venv/bin/python3"
 

@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import requests
 import wikipedia
+import time
 
 # Edit These Flags To Customize the software
 PORT = 1991
@@ -21,7 +22,9 @@ def get_bird_image_url(sci_name):
     manual_image_overrides = {
     "Milvus milvus": "https://images.stockcake.com/public/1/1/e/11e71e9c-d454-4102-9526-6011f1a92308_medium/majestic-soaring-eagle-stockcake.jpg",
     "Buteo buteo" : "https://cdn.openart.ai/published/gfDssGha4jNjVWozyeak/bizG1roP_Dtrc_256.webp",
-    "Phasianus colchicus" : "https://cdn.neighbourly.co.nz/images/cache/message_image_thumbnail/message_images/626857575e9081.13864759.jpeg?170410"
+    "Phasianus colchicus" : "https://cdn.neighbourly.co.nz/images/cache/message_image_thumbnail/message_images/626857575e9081.13864759.jpeg?170410",
+    "Anthus pratensis": "https://th.bing.com/th/id/R.295b7daaa42792951d05a6b7da3a4573?rik=qzVHphcXNhp5OA&riu=http%3a%2f%2fwww.naturephoto-cz.com%2fphotos%2fbirds%2fanthus-pratensis-39724.jpg&ehk=SlJKj3z6grLHRdpznIDlz%2bI24%2fGfYvCybL3YCdhF93g%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1",
+    "Sylvia atricapilla": "https://media.istockphoto.com/id/174837709/photo/eurasian-blackcap.jpg?s=612x612&w=0&k=20&c=3kUxdWcOQ8Xj41Q4HEKzxhQPsrkxrAYWc8XupMm_O6g="
     }
 
     
@@ -68,7 +71,10 @@ def fetchData():
 
     print(">> Data Fetch Complete")   
     return data
-
+def getTime():
+    now = time.strftime("%H:%M:%S", time.localtime())
+    print(">> Refresh Time: ", now)
+    return now
 # Initialize Flask app
 print(">> Initializing Flask Web Server")
 app = Flask(__name__)
@@ -78,8 +84,9 @@ app = Flask(__name__)
 def main():
     print(">> Page Requested")
     observations = fetchData()
+    current_time = getTime()
     print(">> Rendering Page")
-    return render_template('index.html', observations=observations[:AMOUNT_OF_BIRDS])
+    return render_template('index.html', observations=observations[:AMOUNT_OF_BIRDS], time=current_time)
 
 if __name__ == "__main__":
     app.run(port=PORT, host=HOST)
