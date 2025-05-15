@@ -79,7 +79,7 @@
     <div class="grid">
         {% for obs in observations %}
         <div class="card">
-            <img src="{{ obs['image_url'] }}" alt="Bird Image">
+            <img src="{{ obs['image_url'] }}" alt="Awaiting Manual Image for {{ obs['sciName'] }}">
             <div class="card-content">
                 <div class="name">{{ obs['comName'] }}</div>
                 <div class="sci">{{ obs['sciName'] }}</div>
