@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Greenham Bird Observations</title>
     <meta http-equiv="refresh" content="900"> <!-- 15 minutes -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: #503a65;
+            font-family: "Roboto Mono", monospace;
+            background-color: #1c345c;
             padding: 20px;
         }
         footer {
@@ -75,7 +75,7 @@
     </style>
 </head>
 <body>
-    <h1>Recent Bird Sightings - Greenham Common - Last Updated At {{ time }}</h1>
+    <h1>Recent Bird Sightings on Greenham Common - Last Updated at {{ time }}</h1>
     <div class="grid">
         {% for obs in observations %}
         <div class="card">
@@ -89,7 +89,13 @@
         </div>
         {% endfor %}
     </div>
-    <footer>
+     
+
+    <div style="text-align: center; margin-top: 20px;">
+        <img src="http://192.168.8.44/images/GCCT-logo-centred-dark-blue.jpg" alt="Greenham Common" style="width: 60%; max-width: 450px; border-radius: 16px;">
+    </div>
+    
+    <footer style="text-align: center;">
         Data Sourced From eBird | Images From Wikipedia And Others | Version: 1.0 | Version Date: 15/5/2025 | Developed By Lawri Darbyshire Age 13 1/2 Exclusively For Use at Greenham Common Control Tower
     </footer>
 </body>
