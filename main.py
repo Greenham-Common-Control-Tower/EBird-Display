@@ -4,7 +4,7 @@ import wikipedia
 import time
 
 # Edit These Flags To Customize the software
-PORT = 1991
+PORT = 1992
 HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
@@ -65,8 +65,10 @@ def fetchData():
     print(">> Getting Images...")
     # Add image URLs
     for obs in data[:AMOUNT_OF_BIRDS]:
-        obs['image_url'] = get_bird_image_url(obs['sciName'])
-
+        try:
+            obs['image_url'] = get_bird_image_url(obs['sciName'])
+        except:
+            print(">> A Bird Requires Manual Image Overide: ", obs['sciName'])
     print(">> Data Fetch Complete")   
     return data
 def getTime():
