@@ -4,7 +4,7 @@ import wikipedia
 import time
 
 # Edit These Flags To Customize the software
-PORT = 1991
+PORT = 1990
 HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
@@ -16,8 +16,12 @@ print(">> KEY: ", KEY)
 print(">> LOCATION: ", LOCATION)
 print(">> Amount of Birds to Display: ", AMOUNT_OF_BIRDS)
 
-def get_bird_image_url(sci_name):
+def log_missing_img(sci_name): 
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+    line = f"[{timestamp}] Missing image: {sci_name}\n" 
+    with open("MISSING_IMAGE_LOG.txt", "a") as f:
 
+def get_bird_image_url(sci_name):
     print(">> Checking For Manual Image Overide")
     manual_image_overrides = {
     "Milvus milvus": "https://images.stockcake.com/public/1/1/e/11e71e9c-d454-4102-9526-6011f1a92308_medium/majestic-soaring-eagle-stockcake.jpg",
@@ -54,6 +58,8 @@ def get_bird_image_url(sci_name):
                     return img
         except Exception as e:
             print(f">> Image lookup failed for {sci_name}: {e}")
+            log_missing_img(sci_name)
+            print("Missing Image Reported")
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Question_mark_%28black%29.svg/1200px-Question_mark_%28black%29.svg.png"
 
 # Function to fetch data
