@@ -24,7 +24,9 @@ def get_bird_image_url(sci_name):
     "Buteo buteo" : "https://cdn.openart.ai/published/gfDssGha4jNjVWozyeak/bizG1roP_Dtrc_256.webp",
     "Phasianus colchicus" : "https://cdn.neighbourly.co.nz/images/cache/message_image_thumbnail/message_images/626857575e9081.13864759.jpeg?170410",
     "Anthus pratensis": "https://th.bing.com/th/id/R.295b7daaa42792951d05a6b7da3a4573?rik=qzVHphcXNhp5OA&riu=http%3a%2f%2fwww.naturephoto-cz.com%2fphotos%2fbirds%2fanthus-pratensis-39724.jpg&ehk=SlJKj3z6grLHRdpznIDlz%2bI24%2fGfYvCybL3YCdhF93g%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1",
-    "Sylvia atricapilla": "https://media.istockphoto.com/id/174837709/photo/eurasian-blackcap.jpg?s=612x612&w=0&k=20&c=3kUxdWcOQ8Xj41Q4HEKzxhQPsrkxrAYWc8XupMm_O6g="
+    "Sylvia atricapilla": "https://media.istockphoto.com/id/174837709/photo/eurasian-blackcap.jpg?s=612x612&w=0&k=20&c=3kUxdWcOQ8Xj41Q4HEKzxhQPsrkxrAYWc8XupMm_O6g=",
+    "Ardea cinerea" : "https://northkent.birdwise.org.uk/wp-content/uploads/2020/05/Grey-heron-800.jpg",
+    "Pica pica" : "https://static.inaturalist.org/photos/256224620/large.jpg"
     }
 
     
