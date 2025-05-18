@@ -4,7 +4,7 @@ import wikipedia
 import time
 
 # Edit These Flags To Customize the software
-PORT = 1990
+PORT = 1991
 HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
@@ -20,6 +20,7 @@ def log_missing_img(sci_name):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
     line = f"[{timestamp}] Missing image: {sci_name}\n" 
     with open("MISSING_IMAGE_LOG.txt", "a") as f:
+        f.write(line)
 
 def get_bird_image_url(sci_name):
     print(">> Checking For Manual Image Overide")
