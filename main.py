@@ -61,7 +61,7 @@ def get_bird_image_url(sci_name):
         except Exception as e:
             print(f">> Image lookup failed for {sci_name}: {e}")
             log_missing_img(sci_name)
-            print("Missing Image Reported")
+            print(">> Missing Image Reported")
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Question_mark_%28black%29.svg/1200px-Question_mark_%28black%29.svg.png"
 
 # Function to fetch data
