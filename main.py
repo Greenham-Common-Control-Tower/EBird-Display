@@ -4,7 +4,7 @@ import wikipedia
 import time
 
 # Edit These Flags To Customize the software
-PORT = 1991
+PORT = 1990
 HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
@@ -16,12 +16,12 @@ print(">> KEY: ", KEY)
 print(">> LOCATION: ", LOCATION)
 print(">> Amount of Birds to Display: ", AMOUNT_OF_BIRDS)
 
-def log_missing_img(sci_name): 
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
-    line = f"[{timestamp}] Missing image: {sci_name}\n" 
+def log_missing_img(sci_name):
+    line = f"[Missing image: {sci_name}\n" 
     with open("MISSING_IMAGE_LOG.txt", "a") as f:
         f.write(line)
-
+        f.close()
+    priint("r")
 def get_bird_image_url(sci_name):
     print(">> Checking For Manual Image Overide")
     manual_image_overrides = {
