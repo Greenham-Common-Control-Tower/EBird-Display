@@ -4,7 +4,7 @@ import wikipedia
 import time
 
 # Edit These Flags To Customize the software
-PORT = 1991
+PORT = 19989
 HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
@@ -25,7 +25,7 @@ def log_missing_img(sci_name):
 def get_bird_image_url(sci_name):
     print(">> Checking For Manual Image Overide")
     manual_image_overrides = {
-    "Milvus milvus": "https://images.stockcake.com/public/1/1/e/11e71e9c-d454-4102-9526-6011f1a92308_medium/majestic-soaring-eagle-stockcake.jpg",
+    "Milvus milvus": "https://www.natureplprints.com/p/729/red-kite-milvus-milvus-flight-15363331.jpg.webp",
     "Buteo buteo" : "https://cdn.openart.ai/published/gfDssGha4jNjVWozyeak/bizG1roP_Dtrc_256.webp",
     "Phasianus colchicus" : "https://cdn.neighbourly.co.nz/images/cache/message_image_thumbnail/message_images/626857575e9081.13864759.jpeg?170410",
     "Anthus pratensis": "https://th.bing.com/th/id/R.295b7daaa42792951d05a6b7da3a4573?rik=qzVHphcXNhp5OA&riu=http%3a%2f%2fwww.naturephoto-cz.com%2fphotos%2fbirds%2fanthus-pratensis-39724.jpg&ehk=SlJKj3z6grLHRdpznIDlz%2bI24%2fGfYvCybL3YCdhF93g%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1",
@@ -33,7 +33,10 @@ def get_bird_image_url(sci_name):
     "Ardea cinerea" : "https://northkent.birdwise.org.uk/wp-content/uploads/2020/05/Grey-heron-800.jpg",
     "Pica pica" : "https://static.inaturalist.org/photos/256224620/large.jpg",
     "Chroicocephalus ridibundus" : "https://www.first-nature.com/algbirds/birdpics/chroicocephalus-ridibundus1.jpg",
-    "Apus apus" : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Apus_apus_-Barcelona%2C_Spain-8_%281%29.jpg/960px-Apus_apus_-Barcelona%2C_Spain-8_%281%29.jpg"
+    "Apus apus" : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Apus_apus_-Barcelona%2C_Spain-8_%281%29.jpg/960px-Apus_apus_-Barcelona%2C_Spain-8_%281%29.jpg",
+    "Saxicola rubicola" : "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/387157581/900",
+    "Phylloscopus trochilus" : "https://base-prod.rspb-prod.magnolia-platform.com/.imaging/focalpoint/_WIDTH_x_HEIGHT_/dam/jcr:db52496b-b63e-46b0-8393-81ed6047bc7c/1924160333-Species-Willow-Warbler-stood-on-mossy-log.jpg",
+    "Coloeus monedula" : "https://www.publicdomainpictures.net/pictures/510000/nahled/kauw-vogel-coloeus-monedula.jpg"
     }
 
     
@@ -72,7 +75,7 @@ def fetchData():
     response = requests.get(f"https://api.ebird.org/v2/data/obs/{LOCATION}/recent", headers=headers)
     response.raise_for_status()
     data = response.json()
-    
+    data = sorted(data, key=lambda x: x['howMany'], reverse=True)
     print(">> Getting Images...")
     # Add image URLs
     for obs in data[:AMOUNT_OF_BIRDS]:
