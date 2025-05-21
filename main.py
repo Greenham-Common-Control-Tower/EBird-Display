@@ -8,7 +8,7 @@ PORT = 1991
 HOST = "0.0.0.0"
 KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
-AMOUNT_OF_BIRDS=12
+AMOUNT_OF_BIRDS=10
 print(">> Starting Software with The Following Argurments")
 print(">> PORT: ", PORT)
 print(">> HOST:", HOST)
