@@ -75,7 +75,8 @@ def fetchData():
     response = requests.get(f"https://api.ebird.org/v2/data/obs/{LOCATION}/recent", headers=headers)
     response.raise_for_status()
     data = response.json()
-    data = sorted(data, key=lambda x: x['howMany'], reverse=True)
+    # Birds reported in the last 30 days at Greenham Common sorted by date and count
+    data = sorted(data, key=lambda x: (x['obsDt'], x['howMany']), reverse=True)
     print(">> Getting Images...")
     # Add image URLs
     for obs in data[:AMOUNT_OF_BIRDS]:
