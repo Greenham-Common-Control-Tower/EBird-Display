@@ -21,7 +21,7 @@ def log_missing_img(sci_name):
     with open("MISSING_IMAGE_LOG.txt", "a") as f:
         f.write(line)
         f.close()
-    priint("r")
+    print("r")
 def get_bird_image_url(sci_name):
     print(">> Checking For Manual Image Overide")
     manual_image_overrides = {
@@ -76,7 +76,7 @@ def fetchData():
     response.raise_for_status()
     data = response.json()
     # Birds reported in the last 30 days at Greenham Common sorted by date and count
-    data = sorted(data, key=lambda x: (x['obsDt'], x['howMany']), reverse=True)
+    data = sorted(data, key=lambda x: (x.get('obsDt', ''), x.get('howMany', 0)), reverse=True)
     print(">> Getting Images...")
     # Add image URLs
     for obs in data[:AMOUNT_OF_BIRDS]:
