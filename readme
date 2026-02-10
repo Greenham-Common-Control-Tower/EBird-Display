@@ -1,7 +1,25 @@
-To install & Customize the software first
+# Installation & Customization
 
-1. edit main.py to adjust the programs arguments and if you would like to replace my api key with yours
-2. edit setup.sh and review the commands and arguments at the topp ensure to edit the app directory varible to match where the program should install to .
-    the setup.sh file will install a startup service to automaticly startup the program on boot delete the relevant commands in the script if you wish to remove this feature.
-    it will also install the required packages and setup a venv for the program to run. 
-3. Run setup.sh this will run the install commands.  the  service should then be running at port 1991
+## Setup Instructions
+
+1. **Configure the application**
+   - Edit `main.py` to adjust program arguments
+   - (Optional) Replace the included API key with your own
+
+2. **Review installation settings**
+   - Edit `setup.sh` and review the commands at the top
+   - Update the `app_directory` variable to match your desired installation location
+   
+   **Note:** By default, `setup.sh` will:
+   - Install required Python packages
+   - Create a virtual environment for the program
+   - Install a systemd service to auto-start the program on boot
+   
+   If you don't want the auto-start service, remove the relevant service installation commands from the script.
+
+3. **Run the installer**
+```bash
+   ./setup.sh
+```
+   
+   Once complete, the service will be running on port 1991.
