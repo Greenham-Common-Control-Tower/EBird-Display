@@ -17,7 +17,7 @@ print(">> LOCATION: ", LOCATION)
 print(">> Amount of Birds to Display: ", AMOUNT_OF_BIRDS)
 
 def log_missing_img(sci_name):
-    line = f"[Missing image: {sci_name}\n" 
+    line = f"Missing image: {sci_name}" 
     with open("MISSING_IMAGE_LOG.txt", "a") as f:
         f.write(line)
         f.close()
@@ -36,7 +36,13 @@ def get_bird_image_url(sci_name):
     "Apus apus" : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Apus_apus_-Barcelona%2C_Spain-8_%281%29.jpg/960px-Apus_apus_-Barcelona%2C_Spain-8_%281%29.jpg",
     "Saxicola rubicola" : "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/387157581/900",
     "Phylloscopus trochilus" : "https://base-prod.rspb-prod.magnolia-platform.com/.imaging/focalpoint/_WIDTH_x_HEIGHT_/dam/jcr:db52496b-b63e-46b0-8393-81ed6047bc7c/1924160333-Species-Willow-Warbler-stood-on-mossy-log.jpg",
-    "Coloeus monedula" : "https://www.publicdomainpictures.net/pictures/510000/nahled/kauw-vogel-coloeus-monedula.jpg"
+    "Coloeus monedula" : "https://www.publicdomainpictures.net/pictures/510000/nahled/kauw-vogel-coloeus-monedula.jpg",
+    "Columba palumbus" : "https://inaturalist-open-data.s3.amazonaws.com/photos/108521205/original.jpg",
+    "Parus major" : "https://upload.wikimedia.org/wikipedia/commons/1/1b/Great_tit_%28Parus_major%29%2C_Parc_du_Rouge-Cloitre%2C_For%C3%AAt_de_Soignes%2C_Brussels_%2826194636951%29.jpg",
+    "Cyanistes caeruleus" : "https://upload.wikimedia.org/wikipedia/commons/8/86/Eurasian_blue_tit_Lancashire.jpg",
+    "Dendrocopos major" : "https://www.aejames.com/wp-content/uploads/2018/12/Great-Spotted-Woodpecker-bird-guide-%E2%80%93-Albert-E-James-and-Sons-900x628.jpg",
+    "Erithacus rubecula" : "https://cdn.britannica.com/77/189277-050-C9C1CA8A/European-robin-redbreast-bird.jpg",
+    "Turdus merula" : "https://upload.wikimedia.org/wikipedia/commons/a/a9/Common_Blackbird.jpg"
     }
 
     
