@@ -42,7 +42,9 @@ def get_bird_image_url(sci_name):
     "Cyanistes caeruleus" : "https://upload.wikimedia.org/wikipedia/commons/8/86/Eurasian_blue_tit_Lancashire.jpg",
     "Dendrocopos major" : "https://www.aejames.com/wp-content/uploads/2018/12/Great-Spotted-Woodpecker-bird-guide-%E2%80%93-Albert-E-James-and-Sons-900x628.jpg",
     "Erithacus rubecula" : "https://cdn.britannica.com/77/189277-050-C9C1CA8A/European-robin-redbreast-bird.jpg",
-    "Turdus merula" : "https://upload.wikimedia.org/wikipedia/commons/a/a9/Common_Blackbird.jpg"
+    "Turdus merula" : "https://upload.wikimedia.org/wikipedia/commons/a/a9/Common_Blackbird.jpg",
+    "Chloris chloris" : "https://www.google.com/imgres?q=Chloris%20chloris&imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F2%2F29%2FChloris_chloris_%2528profile%2529.jpg&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FEuropean_greenfinch&docid=3TqE-51mFVXQ8M&tbnid=RAIgqx741Y6u3M&vet=12ahUKEwjDxZvTttuSAxW8WkEAHRj7JV0QM3oECBsQAA..i&w=3508&h=2732&hcb=2&ved=2ahUKEwjDxZvTttuSAxW8WkEAHRj7JV0QM3oECBsQAA",
+    "Corvus corone" : "https://www.featherbase.info/en/species/corvus/corone"
     }
 
     
