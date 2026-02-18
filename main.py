@@ -6,7 +6,7 @@ import time
 # Edit These Flags To Customize the software
 PORT = 1991
 HOST = "0.0.0.0"
-KEY = "6ohcvqhs11a7"
+KEY = ""
 LOCATION = "L3700344"
 AMOUNT_OF_BIRDS=10
 print(">> Starting Software with The Following Argurments")
