@@ -44,7 +44,21 @@ def get_bird_image_url(sci_name):
     "Erithacus rubecula" : "https://cdn.britannica.com/77/189277-050-C9C1CA8A/European-robin-redbreast-bird.jpg",
     "Turdus merula" : "https://upload.wikimedia.org/wikipedia/commons/a/a9/Common_Blackbird.jpg",
     "Chloris chloris" : "https://www.google.com/imgres?q=Chloris%20chloris&imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F2%2F29%2FChloris_chloris_%2528profile%2529.jpg&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FEuropean_greenfinch&docid=3TqE-51mFVXQ8M&tbnid=RAIgqx741Y6u3M&vet=12ahUKEwjDxZvTttuSAxW8WkEAHRj7JV0QM3oECBsQAA..i&w=3508&h=2732&hcb=2&ved=2ahUKEwjDxZvTttuSAxW8WkEAHRj7JV0QM3oECBsQAA",
-    "Corvus corone" : "https://www.featherbase.info/en/species/corvus/corone"
+    "Corvus corone" : "https://www.featherbase.info/en/species/corvus/corone",
+    "Linaria cannabina" : "https://observation.org/media/photo/4437480.jpg",
+    "Anas platyrhynchos" : "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/308743051/900",
+    "Prunella modularis" : "https://observation.org/media/photo/15634944.jpg",
+    "Vanellus vanellus" : "https://upload.wikimedia.org/wikipedia/commons/2/2f/Northern-Lapwing-Vanellus-vanellus.jpg",
+    "Branta canadensis" : "https://base-prod.rspb-prod.magnolia-platform.com/.imaging/focalpoint/_WIDTH_x_HEIGHT_/dam/jcr:7d2047d9-2411-40ae-af94-5bb3233d1e70/2097541234-Species-Canada-Goose-Flying-to-left.jpg",
+    "Anser anser" : "https://inaturalist-open-data.s3.amazonaws.com/photos/11134288/original.jpg",
+    "Pluvialis apricaria" : "https://upload.wikimedia.org/wikipedia/commons/f/f7/Rohkunborri_Pluvialis_Apricaria.jpg",
+    "Sturnus vulgaris" : "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/317860951/1200",
+    "Troglodytes troglodytes" : "https://www.aejames.com/wp-content/uploads/2018/12/Wren-bird-guide-%E2%80%93-Albert-E-James-and-Sons-900x600.jpg",
+    "Turdus viscivorus" : "https://upload.wikimedia.org/wikipedia/commons/9/9e/Turdus_viscivorus.001_-_Cardiff.jpg",
+    "Lullula arborea" : "https://static.inaturalist.org/photos/65541931/large.jpeg",
+    "Corvus frugilegus" : "https://www.wildlifeinsight.com/wp-content/gallery/gb_birds/rook_6768.jpg",
+    "Phalacrocorax carbo" : "https://upload.wikimedia.org/wikipedia/commons/c/c3/2021-05-05_Phalacrocorax_carbo_carbo%2C_Killingworth_Lake%2C_Northumberland_1-1.jpg"
+    
     }
 
     
