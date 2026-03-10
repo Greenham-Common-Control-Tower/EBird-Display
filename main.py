@@ -6,7 +6,7 @@ import time
 # Edit These Flags To Customize the software
 PORT = 1991
 HOST = "0.0.0.0"
-KEY = ""
+KEY = "6ohcvqhs11a7"
 LOCATION = "L3700344"
 AMOUNT_OF_BIRDS=10
 print(">> Starting Software with The Following Argurments")
@@ -44,7 +44,7 @@ def get_bird_image_url(sci_name):
     "Erithacus rubecula" : "https://cdn.britannica.com/77/189277-050-C9C1CA8A/European-robin-redbreast-bird.jpg",
     "Turdus merula" : "https://upload.wikimedia.org/wikipedia/commons/a/a9/Common_Blackbird.jpg",
     "Chloris chloris" : "https://www.google.com/imgres?q=Chloris%20chloris&imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F2%2F29%2FChloris_chloris_%2528profile%2529.jpg&imgrefurl=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FEuropean_greenfinch&docid=3TqE-51mFVXQ8M&tbnid=RAIgqx741Y6u3M&vet=12ahUKEwjDxZvTttuSAxW8WkEAHRj7JV0QM3oECBsQAA..i&w=3508&h=2732&hcb=2&ved=2ahUKEwjDxZvTttuSAxW8WkEAHRj7JV0QM3oECBsQAA",
-    "Corvus corone" : "https://www.featherbase.info/en/species/corvus/corone",
+    "Corvus corone" : "https://www.featherbase.info/static/images/speciesimages/c2736530-3897-4838-96e0-b85ad6438723_400px.jpg",
     "Linaria cannabina" : "https://observation.org/media/photo/4437480.jpg",
     "Anas platyrhynchos" : "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/308743051/900",
     "Prunella modularis" : "https://observation.org/media/photo/15634944.jpg",
