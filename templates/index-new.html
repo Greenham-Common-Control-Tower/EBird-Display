@@ -5,7 +5,7 @@
     <title>Greenham Bird Observations</title>
     <meta http-equiv="refresh" content="900">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Open+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --navy:          #1c345c;
@@ -22,7 +22,9 @@
             --warm-white:    #edf2f8;
             --text-dim:      #8faac8;
             --text-muted:    #4a6585;
-            --sans:  'Nunito', system-ui, sans-serif;
+            --gold:          #c8a035;
+            --gold-light:    #dbb84a;
+            --sans:  'Open Sans', sans-serif;
             --mono:  'JetBrains Mono', monospace;
         }
 
@@ -39,31 +41,55 @@
         /* ── Header ── */
         header {
             background: var(--navy-deep);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            padding: 28px 48px;
+            border-bottom: 3px solid var(--gold);
+            padding: 0 28px;
+            height: 72px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 24px;
+            flex-shrink: 0;
         }
 
-        .header-left {
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-logo {
+            height: 44px;
+            width: auto;
+        }
+
+        .header-titles {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 0px;
         }
 
-        .location-tag {
-            font-family: var(--mono);
-            font-size: 10px;
-            letter-spacing: 0.2em;
+        .header-org {
+            font-family: 'League Gothic', sans-serif;
+            font-size: 42px;
+            font-weight: 400;
+            color: var(--warm-white);
+            letter-spacing: 0.04em;
             text-transform: uppercase;
-            color: var(--green);
+            line-height: 1;
+        }
+
+        .header-sub {
+            font-family: var(--sans);
+            font-size: 11px;
+            font-weight: 300;
+            color: var(--gold-light);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             display: flex;
             align-items: center;
             gap: 8px;
-            opacity: 0.9;
         }
+
         .live-dot {
             width: 6px;
             height: 6px;
@@ -77,19 +103,6 @@
             50%       { opacity: 0.3; box-shadow: none; }
         }
 
-        h1 {
-            font-family: var(--sans);
-            font-size: clamp(22px, 3vw, 36px);
-            font-weight: 800;
-            color: var(--warm-white);
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-        h1 span {
-            color: var(--green-soft);
-            font-weight: 300;
-        }
-
         .header-right {
             display: flex;
             align-items: center;
@@ -97,26 +110,29 @@
             flex-shrink: 0;
         }
 
-        .header-meta {
-            text-align: right;
+        .clock-block {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-        }
-        .meta-line {
-            font-family: var(--mono);
-            font-size: 10px;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-        }
-        .meta-line span {
-            color: var(--green-soft);
+            align-items: flex-end;
+            gap: 2px;
         }
 
-        .header-logo {
-            height: 80px;
-            width: auto;
-            opacity: 1;
+        #clock {
+            font-family: var(--sans);
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--warm-white);
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        #date-display {
+            font-family: var(--sans);
+            font-size: 11px;
+            font-weight: 300;
+            color: var(--gold-light);
+            letter-spacing: 0.5px;
         }
 
         /* ── Grid ── */
@@ -345,25 +361,33 @@
 <body>
 
     <header>
-        <div class="header-left">
-            <div class="location-tag">
-                <span class="live-dot"></span>
-                Greenham Common &nbsp;·&nbsp; Berkshire, UK
+        <div class="header-brand">
+            <img class="header-logo" src="{{ url_for('static', filename='Image/GCCT-logo-NoBG.png') }}" alt="Greenham Common Control Tower">
+            <div class="header-titles">
+                <div class="header-org">Greenham Control Tower</div>
+                <div class="header-sub">
+                    <span class="live-dot"></span>
+                    Recent Bird Sightings &nbsp;·&nbsp; Greenham Common
+                </div>
             </div>
-            <h1>Recent Bird <span>Sightings</span></h1>
         </div>
         <div class="header-right">
-            <div class="header-meta">
-                <div class="meta-line">Updated &nbsp;<span>{{ time }}</span></div>
-                <div class="meta-line">Refreshes every 15 min</div>
+            <div class="clock-block">
+                <div id="clock">--:--:--</div>
+                <div id="date-display"></div>
             </div>
-            <img
-                class="header-logo"
-                src="{{ url_for('static', filename='Image/GCCT-logo-NoBG.png') }}"
-                alt="Greenham Common Control Tower"
-            >
         </div>
     </header>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB');
+            document.getElementById('date-display').textContent = now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
 
     <div class="grid">
         {% for obs in observations %}
