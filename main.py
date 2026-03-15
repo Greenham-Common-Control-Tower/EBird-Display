@@ -1,12 +1,16 @@
 from flask import Flask, render_template
+from dotenv import load_dotenv
 import requests
 import wikipedia
 import time
+import os
+
+load_dotenv()
 
 # Edit These Flags To Customize the software
 PORT = 1991
 HOST = "0.0.0.0"
-KEY = ""
+KEY = get.env("API_KEY")
 LOCATION = "L3700344"
 AMOUNT_OF_BIRDS=10
 print(">> Starting Software with The Following Argurments")
