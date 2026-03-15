@@ -10,12 +10,9 @@ load_dotenv()
 # Edit These Flags To Customize the software
 PORT = 1991
 HOST = "0.0.0.0"
-<<<<<<< HEAD
 KEY = get.env("API_KEY")
-=======
-KEY = "6ohcvqhs11a7"
->>>>>>> 251abbb6979da269d21e308ac4e11436643e7504
 LOCATION = "L3700344"
+
 AMOUNT_OF_BIRDS=10
 print(">> Starting Software with The Following Argurments")
 print(">> PORT: ", PORT)
