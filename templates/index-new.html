@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Greenham Bird Observations</title>
+    <meta http-equiv="refresh" content="900">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:          #1c345c;
+            --navy-deep:     #152848;
+            --navy-light:    #243f6e;
+            --navy-surface:  #1e3660;
+            --glass-bg:      rgba(255, 255, 255, 0.06);
+            --glass-bg-hover:rgba(255, 255, 255, 0.10);
+            --glass-border:  rgba(255, 255, 255, 0.11);
+            --glass-border-hover: rgba(255, 255, 255, 0.28);
+            --green:         #5ecc7b;
+            --green-soft:    #90dba0;
+            --teal:          #4db8c8;
+            --warm-white:    #edf2f8;
+            --text-dim:      #8faac8;
+            --text-muted:    #4a6585;
+            --sans:  'Nunito', system-ui, sans-serif;
+            --mono:  'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--navy);
+            color: var(--warm-white);
+            font-family: var(--sans);
+            min-height: 100vh;
+            padding-bottom: 56px;
+        }
+
+        /* ── Header ── */
+        header {
+            background: var(--navy-deep);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 28px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .location-tag {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.9;
+        }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0;
+            animation: livepulse 2.8s ease-in-out infinite;
+        }
+        @keyframes livepulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--green); }
+            50%       { opacity: 0.3; box-shadow: none; }
+        }
+
+        h1 {
+            font-family: var(--sans);
+            font-size: clamp(22px, 3vw, 36px);
+            font-weight: 800;
+            color: var(--warm-white);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        h1 span {
+            color: var(--green-soft);
+            font-weight: 300;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-shrink: 0;
+        }
+
+        .header-meta {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .meta-line {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+        .meta-line span {
+            color: var(--green-soft);
+        }
+
+        .header-logo {
+            height: 80px;
+            width: auto;
+            opacity: 1;
+        }
+
+        /* ── Grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 36px 48px;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+        .card:hover {
+            border-color: var(--glass-border-hover);
+            background: var(--glass-bg-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+        }
+
+        .rank-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 3;
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+            background: rgba(21, 40, 72, 0.7);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.12);
+            letter-spacing: 0.05em;
+        }
+
+        .card-img-wrap {
+            height: 190px;
+            overflow: hidden;
+            position: relative;
+            background: var(--navy-deep);
+        }
+        .card-img-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 64px;
+            background: linear-gradient(transparent, rgba(21, 40, 72, 0.85));
+            pointer-events: none;
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease, filter 0.3s ease;
+            filter: brightness(0.9) saturate(0.9);
+        }
+        .card:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.97) saturate(1.0);
+        }
+
+        .card-body {
+            padding: 14px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .common-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--warm-white);
+            line-height: 1.2;
+        }
+
+        .sci-name {
+            font-size: 13px;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--green-soft);
+            opacity: 0.85;
+        }
+
+        .card-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.07);
+            margin: 9px 0 7px;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity-badge {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--teal);
+            background: rgba(77, 184, 200, 0.12);
+            border: 1px solid rgba(77, 184, 200, 0.22);
+            border-radius: 5px;
+            padding: 4px 10px;
+            letter-spacing: 0.03em;
+        }
+
+        .obs-date {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+
+        .status-badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 4px;
+            padding: 2px 7px;
+            letter-spacing: 0.1em;
+        }
+        .status-CR { background: #7b0000; animation: flashred 1.2s ease-in-out infinite; }
+        .status-EN { background: #c0392b; animation: flashred 1.2s ease-in-out infinite; }
+        .status-VU { background: #e67e22; animation: flashred 1.8s ease-in-out infinite; }
+        .status-NT { background: #d4ac0d; color: #1a1a1a; }
+        .status-LC { background: #27ae60; }
+        .status-DD { background: #566573; }
+        .status-NE { background: #2c3e50; }
+        .status-UNKNOWN { display: none; }
+        @keyframes flashred {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.25; }
+        }
+
+        /* ── Status Key ── */
+        .status-key {
+            position: fixed;
+            right: 24px;
+            bottom: 52px;
+            background: rgba(21, 40, 72, 0.92);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+        .key-title {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        .key-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .key-badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 4px;
+            padding: 2px 7px;
+            letter-spacing: 0.08em;
+            width: 42px;
+            text-align: center;
+        }
+        .key-label {
+            font-family: var(--sans);
+            font-size: 11px;
+            color: var(--text-dim);
+            white-space: nowrap;
+        }
+
+        /* ── Footer ── */
+        footer {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--navy-deep);
+            border-top: 1px solid rgba(255,255,255,0.07);
+            padding: 10px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+        .footer-credits {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+        .footer-version {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: rgba(94, 204, 123, 0.5);
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="location-tag">
+                <span class="live-dot"></span>
+                Greenham Common &nbsp;·&nbsp; Berkshire, UK
+            </div>
+            <h1>Recent Bird <span>Sightings</span></h1>
+        </div>
+        <div class="header-right">
+            <div class="header-meta">
+                <div class="meta-line">Updated &nbsp;<span>{{ time }}</span></div>
+                <div class="meta-line">Refreshes every 15 min</div>
+            </div>
+            <img
+                class="header-logo"
+                src="{{ url_for('static', filename='Image/GCCT-logo-NoBG.png') }}"
+                alt="Greenham Common Control Tower"
+            >
+        </div>
+    </header>
+
+    <div class="grid">
+        {% for obs in observations %}
+        <div class="card">
+            <div class="rank-badge"># {{ loop.index }}</div>
+            <div class="card-img-wrap">
+                <img
+                    src="{{ obs['image_url'] }}"
+                    alt="{{ obs['comName'] }}"
+                    onerror="this.src='https://i0.wp.com/www.beyourownbirder.com/wp-content/uploads/2019/01/mystery-birds.jpg'"
+                >
+            </div>
+            <div class="card-body">
+                <div class="common-name">{{ obs['comName'] }}</div>
+                <div class="sci-name">{{ obs['sciName'] }}</div>
+                <div class="card-divider"></div>
+                <div class="card-meta">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="quantity-badge">Seen: {{ obs['howMany'] or 1 }}</div>
+                        {% if obs.get('conservation_status') %}
+                        <div class="status-badge status-{{ obs['conservation_status'] }}">{{ obs['conservation_status'] }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="obs-date">{{ obs['obsDt'] }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <aside class="status-key">
+        <div class="key-title">IUCN Status</div>
+        <div class="key-row">
+            <span class="key-badge status-CR">CR</span>
+            <span class="key-label">Critically Endangered</span>
+        </div>
+        <div class="key-row">
+            <span class="key-badge status-EN">EN</span>
+            <span class="key-label">Endangered</span>
+        </div>
+        <div class="key-row">
+            <span class="key-badge status-VU">VU</span>
+            <span class="key-label">Vulnerable</span>
+        </div>
+        <div class="key-row">
+            <span class="key-badge status-NT">NT</span>
+            <span class="key-label">Near Threatened</span>
+        </div>
+        <div class="key-row">
+            <span class="key-badge status-LC">LC</span>
+            <span class="key-label">Least Concern</span>
+        </div>
+        <div class="key-row">
+            <span class="key-badge status-DD">DD</span>
+            <span class="key-label">Data Deficient</span>
+        </div>
+    </aside>
+
+    <footer>
+        <div class="footer-credits">
+            Data: Cornell Lab eBird &nbsp;·&nbsp; Images: Wikipedia, iNaturalist &nbsp;·&nbsp; Developed by Lawri Darbyshire for Greenham Common Control Tower
+        </div>
+        <div class="footer-version">V1.5.0</div>
+    </footer>
+
+</body>
+</html>

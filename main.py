@@ -4,22 +4,26 @@ import requests
 import wikipedia
 import time
 import os
+import json
 
+# Load Envronment Variables From .env
 load_dotenv()
 
 # Edit These Flags To Customize the software
 PORT = 1991
 HOST = "0.0.0.0"
-KEY = get.env("API_KEY")
+KEY = os.getenv("API_KEY")
+IUCN_KEY = os.getenv("IUCN_KEY")
 LOCATION = "L3700344"
+iucn_cache = {}
 
-AMOUNT_OF_BIRDS=10
+AMOUNT_OF_BIRDS=20
 print(">> Starting Software with The Following Argurments")
 print(">> PORT: ", PORT)
 print(">> HOST:", HOST)
-print(">> KEY: ", KEY)
 print(">> LOCATION: ", LOCATION)
 print(">> Amount of Birds to Display: ", AMOUNT_OF_BIRDS)
+print(">> IUCN Key Loaded:", "Yes" if IUCN_KEY else "No - conservation badges will not show")
 
 def log_missing_img(sci_name):
     line = f"Missing image: {sci_name}" 
@@ -66,11 +70,13 @@ def get_bird_image_url(sci_name):
     
     }
 
+
     
     if sci_name in manual_image_overrides:
         print(">> Image Overide Engaged For: ",sci_name)
         return manual_image_overrides[sci_name]
     else:
+        
         try:
             print(">> Trying Wikipediea Image Base")
             page = wikipedia.page(sci_name)
@@ -95,6 +101,143 @@ def get_bird_image_url(sci_name):
             print(">> Missing Image Reported")
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Question_mark_%28black%29.svg/1200px-Question_mark_%28black%29.svg.png"
 
+def get_bird_image_url_new(sci_name):
+    manual_image_overrides = {}
+    print(">> Searching for ", sci_name)
+
+    # First We Check if the Image is in the Overide List.
+    if sci_name in manual_image_overrides:
+        #print(">> Found Overide for ", sci_name)
+        #return manual_image_overrides[sci_name]
+        a = 1
+    # Next We Need to Check if the image is cached from a previous request if so return the cached url without contacting iNaturalist
+    elif sci_name in image_cache:
+        print(">> Found Cached URL  for ", sci_name)
+        return image_cache[sci_name]
+    # Next We Query iNaturalist for Images as a Fallback 
+    else: 
+        # Send the Request To iNaturalist
+        response = requests.get(
+            "https://api.inaturalist.org/v1/taxa",
+            params={"q": sci_name, "rank": "species", "per_page": 1}
+        )
+
+        # Process the Response and Store as JSON
+        response.raise_for_status()
+        data = response.json()
+
+        results = data.get("results", [])
+        
+        # If iNaturalist Fails we go to the final Fallback Wikimedia Commons
+        if not results:
+            # Query Wikipedia for an Image
+            page = wikipedia.page(sci_name)
+            for img in page.images:
+                url = img.lower()
+                if ( # Attempt to Filter Incorrect Images  but this is verry Unreliable
+                    any(url.endswith(ext) for ext in ['.jpg', '.jpeg', '.png']) and
+                    'map' not in url and
+                    'distribution' not in url and
+                    'range' not in url and
+                    'logo' not in url and
+                    'icon' not in url and
+                    'symbol' not in url and
+                    'flag' not in url and
+                    'coat_of_arms' not in url
+                ):
+                    print(">> Found a URL for ", sci_name, "on Wikipedia")
+                    return img
+            print(">> Generic Image Returned")
+            return "https://i0.wp.com/www.beyourownbirder.com/wp-content/uploads/2019/01/mystery-birds.jpg" # Return a Question Mark as a last resort  
+        
+        # Take The URL and Look for the Medium Image Quality URL - Medium Image Quality is chosen due to the towers slow internet conection and to preserve bandwith
+        url = results[0].get("default_photo", {}).get("medium_url")
+        image_cache[sci_name] = url
+        save_image_cache()
+        print(">> Found a URL for ", sci_name, "in iNaturalist API")
+        return url
+    print("Debug1")
+
+IMAGE_CACHE_FILE = "image_cache.json"
+IUCN_CACHE_FILE = "iucn_cache.json"
+
+def load_iucn_cache():
+    if os.path.exists(IUCN_CACHE_FILE):
+        try:
+            with open(IUCN_CACHE_FILE, "r") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+def save_iucn_cache():
+    try:
+        with open(IUCN_CACHE_FILE, "w") as f:
+            json.dump(iucn_cache, f, indent=2)
+    except Exception as e:
+        print(f">> Failed to save IUCN cache: {e}")
+
+def load_image_cache():
+    if os.path.exists(IMAGE_CACHE_FILE):
+        try:
+            with open(IMAGE_CACHE_FILE, "r") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+def save_image_cache():
+    try:
+        with open(IMAGE_CACHE_FILE, "w") as f:
+            json.dump(image_cache, f, indent=2)
+    except Exception as e:
+        print(f">> Failed to save image cache: {e}")
+
+iucn_cache = load_iucn_cache()
+# Clear any UNKNOWN entries so they get retried with the fixed URL
+iucn_cache = {k: v for k, v in iucn_cache.items() if v is not None and v != "UNKNOWN"}
+print(f">> IUCN Cache Loaded: {len(iucn_cache)} species cached")
+image_cache = load_image_cache()
+print(f">> Image Cache Loaded: {len(image_cache)} species cached")
+
+# IUCN Red List v4 conservation status lookup
+def get_conservation_status(sci_name):
+    if sci_name in iucn_cache:
+        print(f">> IUCN cache hit for {sci_name}: {iucn_cache[sci_name]}")
+        return iucn_cache[sci_name]
+    if not IUCN_KEY:
+        return None
+    try:
+        parts = sci_name.split(' ', 1)
+        genus, species = parts[0], parts[1]
+        response = requests.get(
+            "https://api.iucnredlist.org/api/v4/taxa/scientific_name",
+            headers={"Authorization": f"Bearer {IUCN_KEY}"},
+            params={"genus_name": genus, "species_name": species},
+            timeout=5
+        )
+        # 404 means IUCN doesn't recognise this taxonomy - store as UNKNOWN and move on
+        if response.status_code == 404:
+            print(f">> IUCN: {sci_name} not found (taxonomy mismatch) - storing as DD")
+            iucn_cache[sci_name] = "DD"
+            save_iucn_cache()
+            return "DD"
+        response.raise_for_status()
+        data = response.json()
+        assessments = data.get("assessments", [])
+        # Filter to global scope (code "1") and latest only
+        global_latest = next((a for a in assessments if a.get("latest") and a.get("scopes", [{}])[0].get("code") == "1"), None)
+        if not global_latest:
+            global_latest = next((a for a in assessments if a.get("latest")), None)
+        status = global_latest.get("red_list_category_code") if global_latest else "NE"
+    except Exception as e:
+        print(f">> IUCN lookup failed for {sci_name}: {e}")
+        status = "DD"
+    iucn_cache[sci_name] = status
+    save_iucn_cache()
+    print(f">> Conservation status for {sci_name}: {status}")
+    return status
+
 # Function to fetch data
 def fetchData():
     print(">> Making API Request With Location: ", LOCATION)
@@ -108,10 +251,11 @@ def fetchData():
     # Add image URLs
     for obs in data[:AMOUNT_OF_BIRDS]:
         try:
-            obs['image_url'] = get_bird_image_url(obs['sciName'])
-        except:
-            print(">> A Bird Requires Manual Image Overide: ", obs['sciName'])
-    print(">> Data Fetch Complete")   
+            obs['image_url'] = get_bird_image_url_new(obs['sciName'])
+        except Exception as e:
+            print(">> A Bird Requires Manual Image Overide: ", obs['sciName'], "Error: ", e)
+        obs['conservation_status'] = get_conservation_status(obs['sciName'])
+    print(">> Images and Data Aquired.")   
     return data
 def getTime():
     now = time.strftime("%H:%M:%S", time.localtime())
@@ -124,10 +268,17 @@ app = Flask(__name__)
 
 @app.route("/")
 def main():
-    print(">> Page Requested")
+    print(">> Refresh Requested")
     observations = fetchData()
     current_time = getTime()
-    print(">> Rendering Page")
+    print(">> Refresh Complete. Rendering to Display")
+    return render_template('index-new.html', observations=observations[:AMOUNT_OF_BIRDS], time=current_time)
+@app.route("/oldui")
+def main_old():
+    print(">> Refresh Requested")
+    observations = fetchData()
+    current_time = getTime()
+    print(">> Refresh Complete. Rendering to Display")
     return render_template('index.html', observations=observations[:AMOUNT_OF_BIRDS], time=current_time)
 
 if __name__ == "__main__":
