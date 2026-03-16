@@ -5,6 +5,9 @@ import wikipedia
 import time
 import os
 import json
+import boto3
+from botocore.client import Config
+import hashlib
 
 # Load Envronment Variables From .env
 load_dotenv()
@@ -14,6 +17,52 @@ PORT = 1991
 HOST = "0.0.0.0"
 KEY = os.getenv("API_KEY")
 IUCN_KEY = os.getenv("IUCN_KEY")
+
+# MinIO / S3 config
+MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT")
+MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY")
+MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY")
+MINIO_BUCKET = os.getenv("MINIO_BUCKET", "bird-dashboard")
+
+s3 = boto3.client(
+    "s3",
+    endpoint_url=f"http://{MINIO_ENDPOINT}",
+    aws_access_key_id=MINIO_ACCESS_KEY,
+    aws_secret_access_key=MINIO_SECRET_KEY,
+    config=Config(signature_version="s3v4"),
+    region_name="us-east-1"
+)
+
+def ensure_bucket():
+    try:
+        s3.head_bucket(Bucket=MINIO_BUCKET)
+    except Exception:
+        s3.create_bucket(Bucket=MINIO_BUCKET)
+        print(f">> Created MinIO bucket: {MINIO_BUCKET}")
+
+def upload_image_to_minio(url, sci_name):
+    """Download image from URL and upload to MinIO. Returns the MinIO URL."""
+    ext = url.split("?")[0].rsplit(".", 1)[-1].lower()
+    if ext not in ["jpg", "jpeg", "png", "webp"]:
+        ext = "jpg"
+    filename = hashlib.md5(sci_name.encode()).hexdigest() + "." + ext
+    # Check if already exists in MinIO
+    try:
+        s3.head_object(Bucket=MINIO_BUCKET, Key=filename)
+        print(f">> MinIO cache hit for {sci_name}")
+        return f"http://{MINIO_ENDPOINT}/{MINIO_BUCKET}/{filename}"
+    except Exception:
+        pass
+    # Download and upload
+    try:
+        r = requests.get(url, timeout=10)
+        r.raise_for_status()
+        s3.put_object(Bucket=MINIO_BUCKET, Key=filename, Body=r.content, ContentType=f"image/{ext}")
+        print(f">> Uploaded {sci_name} to MinIO as {filename}")
+        return f"http://{MINIO_ENDPOINT}/{MINIO_BUCKET}/{filename}"
+    except Exception as e:
+        print(f">> MinIO upload failed for {sci_name}: {e}, falling back to original URL")
+        return url
 LOCATION = "L3700344"
 iucn_cache = {}
 
@@ -110,10 +159,19 @@ def get_bird_image_url_new(sci_name):
         #print(">> Found Overide for ", sci_name)
         #return manual_image_overrides[sci_name]
         a = 1
-    # Next We Need to Check if the image is cached from a previous request if so return the cached url without contacting iNaturalist
+    # Next We Need to Check if the image is cached from a previous request.
+    # If the cached URL is already a MinIO URL return it directly, otherwise re-upload to MinIO.
     elif sci_name in image_cache:
-        print(">> Found Cached URL  for ", sci_name)
-        return image_cache[sci_name]
+        cached = image_cache[sci_name]
+        if MINIO_ENDPOINT and MINIO_ENDPOINT in cached:
+            print(">> Found MinIO Cached URL for ", sci_name)
+            return cached
+        else:
+            print(">> Re-uploading cached external URL to MinIO for ", sci_name)
+            minio_url = upload_image_to_minio(cached, sci_name)
+            image_cache[sci_name] = minio_url
+            save_image_cache()
+            return minio_url
     # Next We Query iNaturalist for Images as a Fallback 
     else: 
         # Send the Request To iNaturalist
@@ -146,12 +204,16 @@ def get_bird_image_url_new(sci_name):
                     'coat_of_arms' not in url
                 ):
                     print(">> Found a URL for ", sci_name, "on Wikipedia")
-                    return img
+                    minio_url = upload_image_to_minio(img, sci_name)
+                    image_cache[sci_name] = minio_url
+                    save_image_cache()
+                    return minio_url
             print(">> Generic Image Returned")
             return "https://i0.wp.com/www.beyourownbirder.com/wp-content/uploads/2019/01/mystery-birds.jpg" # Return a Question Mark as a last resort  
         
         # Take The URL and Look for the Medium Image Quality URL - Medium Image Quality is chosen due to the towers slow internet conection and to preserve bandwith
-        url = results[0].get("default_photo", {}).get("medium_url")
+        original_url = results[0].get("default_photo", {}).get("medium_url")
+        url = upload_image_to_minio(original_url, sci_name)
         image_cache[sci_name] = url
         save_image_cache()
         print(">> Found a URL for ", sci_name, "in iNaturalist API")
@@ -193,6 +255,7 @@ def save_image_cache():
     except Exception as e:
         print(f">> Failed to save image cache: {e}")
 
+ensure_bucket()
 iucn_cache = load_iucn_cache()
 # Clear any UNKNOWN entries so they get retried with the fixed URL
 iucn_cache = {k: v for k, v in iucn_cache.items() if v is not None and v != "UNKNOWN"}
